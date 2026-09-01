@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: eventsphere-php
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: DB_DRIVER
+        value: auto
