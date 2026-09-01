@@ -86,7 +86,9 @@ function generateRegistrationCode(): string {
 function getAllEvents(): array {
     $pdo = getDBConnection();
     $stmt = $pdo->query("SELECT * FROM events ORDER BY event_date ASC");
-    return $stmt->fetchAll();
+    $data = $stmt->fetchAll();
+    $stmt->closeCursor();
+    return $data;
 }
 
 /**
@@ -97,6 +99,7 @@ function getEventById(int $id): ?array {
     $stmt = $pdo->prepare("SELECT * FROM events WHERE id = :id LIMIT 1");
     $stmt->execute(['id' => $id]);
     $event = $stmt->fetch();
+    $stmt->closeCursor();
     return $event ?: null;
 }
 
@@ -162,6 +165,7 @@ function createRegistration(array $data): array {
     $checkStmt = $pdo->prepare("SELECT id, registration_code FROM registrations WHERE event_id = :event_id AND email = :email LIMIT 1");
     $checkStmt->execute(['event_id' => $eventId, 'email' => $email]);
     $existing = $checkStmt->fetch();
+    $checkStmt->closeCursor();
     if ($existing) {
         // Return existing registration
         return [
@@ -183,6 +187,7 @@ function createRegistration(array $data): array {
         'email' => $email,
         'registration_code' => $code
     ]);
+    $stmt->closeCursor();
 
     $id = (int) $pdo->lastInsertId();
 
@@ -220,6 +225,7 @@ function getRegistrationById(int $id): ?array {
     ");
     $stmt->execute(['id' => $id]);
     $row = $stmt->fetch();
+    $stmt->closeCursor();
     return $row ?: null;
 }
 
@@ -249,6 +255,7 @@ function getRegistrationByCode(string $code): ?array {
     ");
     $stmt->execute(['code' => $code]);
     $row = $stmt->fetch();
+    $stmt->closeCursor();
     return $row ?: null;
 }
 
@@ -293,7 +300,9 @@ function getAllRegistrations(?string $search = null, ?int $eventId = null): arra
 
     $stmt = $pdo->prepare($query);
     $stmt->execute($params);
-    return $stmt->fetchAll();
+    $rows = $stmt->fetchAll();
+    $stmt->closeCursor();
+    return $rows;
 }
 
 /**
@@ -302,7 +311,9 @@ function getAllRegistrations(?string $search = null, ?int $eventId = null): arra
 function deleteRegistration(int $id): bool {
     $pdo = getDBConnection();
     $stmt = $pdo->prepare("DELETE FROM registrations WHERE id = :id");
-    return $stmt->execute(['id' => $id]);
+    $res = $stmt->execute(['id' => $id]);
+    $stmt->closeCursor();
+    return $res;
 }
 
 /**
@@ -310,8 +321,13 @@ function deleteRegistration(int $id): bool {
  */
 function getDashboardStats(): array {
     $pdo = getDBConnection();
-    $totalRegistrations = (int) $pdo->query("SELECT COUNT(*) FROM registrations")->fetchColumn();
-    $totalEvents = (int) $pdo->query("SELECT COUNT(*) FROM events")->fetchColumn();
+    $regCountStmt = $pdo->query("SELECT COUNT(*) FROM registrations");
+    $totalRegistrations = (int) $regCountStmt->fetchColumn();
+    $regCountStmt->closeCursor();
+
+    $evtCountStmt = $pdo->query("SELECT COUNT(*) FROM events");
+    $totalEvents = (int) $evtCountStmt->fetchColumn();
+    $evtCountStmt->closeCursor();
     
     // Recent 5 registrations
     $recentStmt = $pdo->query("
@@ -322,6 +338,7 @@ function getDashboardStats(): array {
         LIMIT 5
     ");
     $recentRegistrations = $recentStmt->fetchAll();
+    $recentStmt->closeCursor();
 
     return [
         'total_registrations' => $totalRegistrations,

@@ -12,54 +12,163 @@ $results = [];
 $status = 'pending';
 $error = null;
 
+$sampleEvents = [
+    [
+        'title' => 'Global AI & NextGen Summit 2026',
+        'description' => 'Join top AI researchers, LLM practitioners, and tech visionaries exploring frontier model architectures, agentic workflows, and ethical AI deployments at scale.',
+        'event_date' => '2026-10-15 09:30:00',
+        'location' => 'Convention Center, Grand Hall A (Bengaluru / Hybrid)',
+        'category' => 'AI & Machine Learning',
+        'capacity' => 350,
+        'image_url' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'Full-Stack Modern Web Engineering',
+        'description' => 'Master the contemporary full-stack ecosystem: PHP 8.4 modern features, high-throughput microservices, edge computing, and reactive frontend architectures.',
+        'event_date' => '2026-10-22 10:00:00',
+        'location' => 'Tech Hub Arena, Room 402 (San Francisco / Online)',
+        'category' => 'Web Development',
+        'capacity' => 120,
+        'image_url' => 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'Cybersecurity & Zero-Trust Defense Expo',
+        'description' => 'Discover enterprise defensive strategies, live ethical hacking demonstrations, cloud workload isolation, and implementing uncompromising Zero-Trust architectures.',
+        'event_date' => '2026-11-05 09:00:00',
+        'location' => 'Cyber Park Auditorium (London / Virtual)',
+        'category' => 'Cybersecurity',
+        'capacity' => 200,
+        'image_url' => 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'Cloud-Native & Kubernetes World 2026',
+        'description' => 'Deep dive into container orchestration, service mesh resilience, multi-cloud disaster recovery, and automated continuous delivery pipelines.',
+        'event_date' => '2026-11-12 11:00:00',
+        'location' => 'Cloudplex Center, Stage 3 (Seattle / Live Stream)',
+        'category' => 'Cloud & DevOps',
+        'capacity' => 280,
+        'image_url' => 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'UI/UX Design Systems & Product Craft',
+        'description' => 'Uncover the secrets of world-class design systems, accessible interface typography, spatial interaction design, and seamless designer-developer collaboration.',
+        'event_date' => '2026-11-19 14:00:00',
+        'location' => 'Design Foundry Studio (Tokyo / Hybrid)',
+        'category' => 'Design & UX',
+        'capacity' => 95,
+        'image_url' => 'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'FinTech Disruptors & Open Banking Summit',
+        'description' => 'Explore the future of algorithmic trading, instant global payment rails, automated compliance engines, and decentralized banking infrastructure.',
+        'event_date' => '2026-11-26 09:30:00',
+        'location' => 'Financial District Center, Tower B (Singapore)',
+        'category' => 'FinTech',
+        'capacity' => 180,
+        'image_url' => 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'Healthcare Tech & Biotech Innovation 2026',
+        'description' => 'Revolutionizing healthcare through predictive genomic models, telemedicine scalability, and high-precision clinical workflow software.',
+        'event_date' => '2026-12-03 10:00:00',
+        'location' => 'Life Sciences Pavilion (Boston / Hybrid)',
+        'category' => 'Healthcare & Biotech',
+        'capacity' => 150,
+        'image_url' => 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'Startup Pitch Arena & VC Networking Night',
+        'description' => 'Connect directly with top tier angel investors and venture funds. Watch 10 curated seed-stage startups battle for $2M in direct funding commitments.',
+        'event_date' => '2026-12-10 18:00:00',
+        'location' => 'Skyline Lounge & Rooftop Garden (New York City)',
+        'category' => 'Startups & VC',
+        'capacity' => 160,
+        'image_url' => 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'Quantum Computing Frontiers 2026',
+        'description' => 'Leading physicists and quantum software engineers demystify qubit error correction, quantum algorithms, and post-quantum cryptographic standards.',
+        'event_date' => '2026-12-16 10:00:00',
+        'location' => 'Institute of Advanced Physics, Main Hall (Zurich)',
+        'category' => 'Deep Tech',
+        'capacity' => 110,
+        'image_url' => 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'Game Dev, XR & Spatial Computing Expo',
+        'description' => 'Hands-on spatial audio design, Unreal Engine 5 real-time rendering, cross-platform VR headsets, and indie game mechanics workshops.',
+        'event_date' => '2027-01-08 11:30:00',
+        'location' => 'Interactive Media Center (Los Angeles / Metaverse)',
+        'category' => 'Gaming & XR',
+        'capacity' => 300,
+        'image_url' => 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'Mobile Masters: Flutter, Swift & React Native',
+        'description' => 'Master performance profiling for 120Hz mobile displays, offline-first sync engines, native bridging, and cross-platform architecture paradigms.',
+        'event_date' => '2027-01-15 13:00:00',
+        'location' => 'Developer Arena, Hall 2 (Berlin / Online)',
+        'category' => 'Mobile Development',
+        'capacity' => 140,
+        'image_url' => 'https://images.unsplash.com/photo-1526498460520-4c246339dccb?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'Data Science, Big Data & Analytics Con',
+        'description' => 'Real-time stream processing, lakehouse architectures, feature store management, and automated statistical testing pipelines for massive datasets.',
+        'event_date' => '2027-01-22 09:00:00',
+        'location' => 'Analytics Dome (Toronto / Hybrid)',
+        'category' => 'Data Science',
+        'capacity' => 220,
+        'image_url' => 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'Product Leadership & Growth Strategy',
+        'description' => 'Actionable playbooks on driving product-led growth, running rigorous user experimentation, and setting high-impact product roadmaps that scale.',
+        'event_date' => '2027-01-29 14:30:00',
+        'location' => 'Executive Forum Hall (Stockholm / Virtual)',
+        'category' => 'Product & Growth',
+        'capacity' => 100,
+        'image_url' => 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'CleanTech & Sustainable Energy Forum',
+        'description' => 'Innovations in smart grid intelligence, carbon accounting APIs, next-generation battery management, and circular electronics manufacturing.',
+        'event_date' => '2027-02-05 10:00:00',
+        'location' => 'Green Tech Center (Amsterdam / Live Stream)',
+        'category' => 'Sustainability',
+        'capacity' => 175,
+        'image_url' => 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'DevOps & Platform Engineering Gathering',
+        'description' => 'Internal developer platforms (IDPs), GitOps best practices, infrastructure-as-code linting, and reducing cognitive developer friction.',
+        'event_date' => '2027-02-12 11:00:00',
+        'location' => 'Platform Engineering Hub (Austin, Texas / Hybrid)',
+        'category' => 'Cloud & DevOps',
+        'capacity' => 190,
+        'image_url' => 'https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=800&auto=format&fit=crop&q=80'
+    ],
+    [
+        'title' => 'Blockchain, Web3 & Digital Assets Forum',
+        'description' => 'Smart contract formal verification, zero-knowledge rollups, institutional asset custody, and decentralized identity standards.',
+        'event_date' => '2027-02-19 13:00:00',
+        'location' => 'Crypto Oasis Center (Dubai / Virtual)',
+        'category' => 'Web3 & Blockchain',
+        'capacity' => 250,
+        'image_url' => 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&auto=format&fit=crop&q=80'
+    ]
+];
+
+require_once __DIR__ . '/../config/database.php';
+
 try {
     $dbType = getenv('DB_TYPE') ?: 'mysql';
 
-    if ($dbType === 'sqlite') {
-        $sqlitePath = getenv('DB_SQLITE_PATH') ?: __DIR__ . '/database.sqlite';
-        $pdo = new PDO("sqlite:" . $sqlitePath, null, null, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        ]);
-        $pdo->exec("PRAGMA foreign_keys = ON;");
-
-        // Create tables for SQLite
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS events (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT NOT NULL,
-                description TEXT NOT NULL,
-                event_date TEXT NOT NULL,
-                location TEXT NOT NULL,
-                category TEXT DEFAULT 'Technology',
-                capacity INTEGER DEFAULT 100,
-                image_url TEXT NULL,
-                created_at TEXT DEFAULT CURRENT_TIMESTAMP
-            );
-
-            CREATE TABLE IF NOT EXISTS registrations (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                event_id INTEGER NOT NULL,
-                name TEXT NOT NULL,
-                email TEXT NOT NULL,
-                registration_code TEXT UNIQUE NOT NULL,
-                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (event_id) REFERENCES events (id) ON DELETE CASCADE
-            );
-
-            CREATE TABLE IF NOT EXISTS admins (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT UNIQUE NOT NULL,
-                email TEXT UNIQUE NOT NULL,
-                password_hash TEXT NOT NULL,
-                created_at TEXT DEFAULT CURRENT_TIMESTAMP
-            );
-        ");
-
-        $results[] = "Created SQLite database and tables successfully at {$sqlitePath}";
+    if ($dbType === 'sqlite' || (DB_DRIVER === 'auto' && $dbType !== 'mysql_forced')) {
+        $pdo = getDBConnection();
+        $results[] = "Created/verified database tables.";
     } else {
         // MySQL setup
-        // Step 1: Connect to server without database selected to create database
         $serverDsn = sprintf("mysql:host=%s;port=%s;charset=%s", DB_HOST, DB_PORT, DB_CHARSET);
         $serverPdo = new PDO($serverDsn, DB_USER, DB_PASS, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -68,15 +177,8 @@ try {
         $serverPdo->exec("CREATE DATABASE IF NOT EXISTS `" . DB_NAME . "` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
         $results[] = "Database `" . DB_NAME . "` verified / created.";
 
-        // Step 2: Connect to the specific database
-        $dbDsn = sprintf("mysql:host=%s;port=%s;dbname=%s;charset=%s", DB_HOST, DB_PORT, DB_NAME, DB_CHARSET);
-        $pdo = new PDO($dbDsn, DB_USER, DB_PASS, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false
-        ]);
+        $pdo = getDBConnection();
 
-        // Step 3: Create tables
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS `events` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -117,59 +219,37 @@ try {
         $results[] = "Table `admins` verified / created.";
     }
 
-    // Step 4: Seed sample events if empty
-    $eventCount = $pdo->query("SELECT COUNT(*) FROM events")->fetchColumn();
-    if ($eventCount == 0) {
-        $sampleEvents = [
-            [
-                'title' => 'Global AI & Cloud Summit 2026',
-                'description' => 'Explore next-generation artificial intelligence breakthroughs, edge computing architectures, and cloud modernization strategies with industry leaders.',
-                'event_date' => '2026-10-15 09:30:00',
-                'location' => 'Convention Center, Hall A (Bengaluru / Hybrid)',
-                'category' => 'Technology',
-                'capacity' => 250,
-                'image_url' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80'
-            ],
-            [
-                'title' => 'Full-Stack Web Dev Workshop',
-                'description' => 'Deep-dive interactive session on modern PHP, REST APIs, reactive frontends, and database scalability optimization.',
-                'event_date' => '2026-10-22 14:00:00',
-                'location' => 'Tech Hub Arena, Room 402',
-                'category' => 'Workshop',
-                'capacity' => 80,
-                'image_url' => 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80'
-            ],
-            [
-                'title' => 'Cybersecurity Defense & Zero Trust',
-                'description' => 'Learn practical penetration testing defense, vulnerability scanning, and how to implement Zero-Trust architecture in enterprise environments.',
-                'event_date' => '2026-11-05 10:00:00',
-                'location' => 'Cyber Park Auditorium',
-                'category' => 'Security',
-                'capacity' => 150,
-                'image_url' => 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop&q=80'
-            ],
-            [
-                'title' => 'Startup Pitch & Networking Night',
-                'description' => 'Connect with venture capitalists, pitch disruptive startup ideas, and network with passionate founders and innovators.',
-                'event_date' => '2026-11-18 18:00:00',
-                'location' => 'Skyline Lounge & Rooftop Garden',
-                'category' => 'Networking',
-                'capacity' => 120,
-                'image_url' => 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80'
-            ]
-        ];
+    // Seed/Synchronize all 16 events
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM events WHERE title = :title");
+    $insertStmt = $pdo->prepare("INSERT INTO events (title, description, event_date, location, category, capacity, image_url) VALUES (:title, :description, :event_date, :location, :category, :capacity, :image_url)");
+    $insertedCount = 0;
 
-        $stmt = $pdo->prepare("INSERT INTO events (title, description, event_date, location, category, capacity, image_url) VALUES (:title, :description, :event_date, :location, :category, :capacity, :image_url)");
-        foreach ($sampleEvents as $ev) {
-            $stmt->execute($ev);
+    foreach ($sampleEvents as $ev) {
+        $stmt->execute(['title' => $ev['title']]);
+        $exists = (int)$stmt->fetchColumn();
+        $stmt->closeCursor();
+        if ($exists === 0) {
+            $insertStmt->execute($ev);
+            $insertStmt->closeCursor();
+            $insertedCount++;
         }
-        $results[] = "Seeded " . count($sampleEvents) . " sample upcoming events.";
-    } else {
-        $results[] = "Events table already contains {$eventCount} events.";
     }
+    $stmt = null;
+    $insertStmt = null;
 
-    // Step 5: Seed default admin user
-    $adminCount = $pdo->query("SELECT COUNT(*) FROM admins WHERE username = 'admin'")->fetchColumn();
+    $totalEvtStmt = $pdo->query("SELECT COUNT(*) FROM events");
+    $totalEvents = (int) $totalEvtStmt->fetchColumn();
+    $totalEvtStmt->closeCursor();
+    $totalEvtStmt = null;
+
+    $results[] = "Events catalog populated. Total active events: <strong>{$totalEvents}</strong> (" . ($insertedCount > 0 ? "Added {$insertedCount} new" : "Up to date") . ").";
+
+    // Seed default admin user
+    $adminCheckStmt = $pdo->query("SELECT COUNT(*) FROM admins WHERE username = 'admin'");
+    $adminCount = (int) $adminCheckStmt->fetchColumn();
+    $adminCheckStmt->closeCursor();
+    $adminCheckStmt = null;
+
     if ($adminCount == 0) {
         $adminPasswordHash = password_hash('admin123', PASSWORD_DEFAULT);
         $adminStmt = $pdo->prepare("INSERT INTO admins (username, email, password_hash) VALUES (:username, :email, :password_hash)");
@@ -178,9 +258,11 @@ try {
             'email' => 'admin@eventsphere.com',
             'password_hash' => $adminPasswordHash
         ]);
+        $adminStmt->closeCursor();
+        $adminStmt = null;
         $results[] = "Created default admin account: Username: <strong>admin</strong> | Password: <strong>admin123</strong>";
     } else {
-        $results[] = "Admin account `admin` already exists.";
+        $results[] = "Admin account `admin` verified.";
     }
 
     $status = 'success';
@@ -213,148 +295,48 @@ if ($isCli && realpath(__FILE__) === realpath($_SERVER['SCRIPT_FILENAME'] ?? '')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database Setup - <?= APP_NAME ?></title>
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --bg: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
-            --success: #10b981;
-            --error: #ef4444;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 24px;
-        }
-        .setup-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 36px;
-            max-width: 580px;
-            width: 100%;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-        }
-        .header {
-            margin-bottom: 24px;
-            text-align: center;
-        }
-        .header h1 {
-            font-size: 1.75rem;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #a5b4fc, #6366f1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .header p { color: var(--text-muted); font-size: 0.95rem; }
-        .log-list {
-            list-style: none;
-            margin: 20px 0;
-            background: #090d16;
-            border-radius: 10px;
-            padding: 16px;
-            border: 1px solid var(--border);
-        }
-        .log-item {
-            padding: 8px 12px;
-            font-size: 0.9rem;
-            color: #cbd5e1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid #1e293b;
-        }
-        .log-item:last-child { border-bottom: none; }
-        .log-item .icon { font-size: 1.1rem; }
-        .alert-error {
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid var(--error);
-            color: #fca5a5;
-            padding: 14px 18px;
-            border-radius: 8px;
-            margin: 16px 0;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-        .admin-info {
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 10px;
-            padding: 16px;
-            margin: 20px 0;
-        }
-        .admin-info h3 { font-size: 0.95rem; color: #a5b4fc; margin-bottom: 8px; }
-        .admin-info p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
-        .actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-        }
-        .btn {
-            flex: 1;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
-        .btn-secondary { background: #334155; color: var(--text-main); }
-        .btn-secondary:hover { background: #475569; }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body>
-    <div class="setup-card">
-        <div class="header">
+<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px;">
+    <div class="form-card" style="max-width: 580px; width: 100%;">
+        <div class="form-header">
+            <div style="font-size: 2.4rem; margin-bottom: 8px;">⚡</div>
             <h1><?= APP_NAME ?> Database Setup</h1>
-            <p>Database & Table Initialization Wizard</p>
+            <p>Schema initialization & 16+ events catalog sync</p>
         </div>
 
         <?php if ($status === 'success'): ?>
-            <ul class="log-list">
-                <?php foreach ($results as $res): ?>
-                    <li class="log-item">
-                        <span class="icon">✅</span>
-                        <span><?= $res ?></span>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-
-            <div class="admin-info">
-                <h3>👑 Default Administrator Credentials</h3>
-                <p><strong>Username:</strong> admin<br><strong>Password:</strong> admin123</p>
+            <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                    <?php foreach ($results as $res): ?>
+                        <li style="display: flex; align-items: center; gap: 10px; font-size: 0.92rem; color: #e2e8f0;">
+                            <span>✅</span>
+                            <span><?= $res ?></span>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
 
-            <div class="actions">
-                <a href="../index.php" class="btn btn-primary">Go to Homepage →</a>
-                <a href="../admin/login.php" class="btn btn-secondary">Admin Login</a>
+            <div class="credentials-box" style="margin-bottom: 24px; text-align: center; padding: 14px;">
+                <h4 style="color: #93c5fd; font-size: 0.95rem; margin-bottom: 4px;">👑 Default Administrator</h4>
+                <p style="font-size: 0.88rem; color: #cbd5e1;">Username: <strong>admin</strong> &nbsp;|&nbsp; Password: <strong>admin123</strong></p>
+            </div>
+
+            <div style="display: flex; gap: 12px;">
+                <a href="../index.php" class="btn-ticket btn-ticket-primary" style="flex: 1; text-align: center; justify-content: center;">Browse 16+ Events →</a>
+                <a href="../admin/login.php" class="btn-ticket btn-ticket-outline" style="text-align: center; justify-content: center;">Admin Portal</a>
             </div>
         <?php else: ?>
-            <div class="alert-error">
-                <strong>Setup Failed:</strong><br>
-                <?= htmlspecialchars($error) ?>
+            <div class="alert alert-error">
+                <div class="alert-content">
+                    <span class="alert-icon">⚠️</span>
+                    <span><strong>Setup Error:</strong> <?= htmlspecialchars($error) ?></span>
+                </div>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 12px;">
-                Please ensure MySQL is running, or check your <code>config/config.php</code> database credentials.
-            </p>
-            <div class="actions">
-                <a href="setup.php" class="btn btn-primary">Retry Setup ↺</a>
-            </div>
+            <a href="setup.php" class="btn-ticket btn-ticket-primary" style="width: 100%; text-align: center; justify-content: center; margin-top: 16px;">Retry Setup ↺</a>
         <?php endif; ?>
     </div>
 </body>

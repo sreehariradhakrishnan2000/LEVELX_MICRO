@@ -1,12 +1,12 @@
 <?php
 /**
- * Registration Page - User Event Registration Form
+ * Registration Page - User Event Registration Form (Premium 2-Column Edition)
  */
 
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/functions.php';
 
-$pageTitle = "Event Registration Form";
+$pageTitle = "Event Registration";
 
 // Fetch all events for the dropdown
 try {
@@ -16,7 +16,7 @@ try {
 }
 
 // Check if event_id is passed via GET (auto-fill / pre-selection)
-$selectedEventId = isset($_GET['event_id']) ? (int) $_GET['event_id'] : 0;
+$selectedEventId = isset($_GET['event_id']) ? (int) $_GET['event_id'] : (isset($events[0]['id']) ? (int)$events[0]['id'] : 0);
 $formData = [
     'name' => '',
     'email' => '',
@@ -42,9 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result['success']) {
             if (!empty($result['is_existing'])) {
-                setFlashMessage('info', 'You were already registered for this event! Here is your registration summary.');
+                setFlashMessage('info', 'You are already registered for this event! Here is your registration voucher.');
             } else {
-                setFlashMessage('success', 'Congratulations! Your event registration was successful.');
+                setFlashMessage('success', 'Congratulations! Your event registration has been confirmed.');
             }
             // Redirect to success page with registration code
             header('Location: ' . getBaseUrl() . '/success.php?code=' . urlencode($result['registration_code']));
@@ -70,11 +70,50 @@ include __DIR__ . '/includes/header.php';
 ?>
 
 <div class="container">
-    <div class="form-layout">
+    <div class="form-2col-layout">
+        <!-- Left Column: Event Spotlight Card -->
+        <aside class="event-spotlight-card">
+            <?php if ($selectedEvent): ?>
+                <?php if (!empty($selectedEvent['image_url'])): ?>
+                    <img src="<?= e($selectedEvent['image_url']) ?>" alt="<?= e($selectedEvent['title']) ?>" class="spotlight-image">
+                <?php endif; ?>
+                <div class="spotlight-body">
+                    <span class="spotlight-badge"><?= e($selectedEvent['category'] ?? 'Conference') ?></span>
+                    <h2 class="spotlight-title"><?= e($selectedEvent['title']) ?></h2>
+
+                    <div class="spotlight-meta-list">
+                        <div class="meta-item">
+                            <span class="meta-icon">📅</span>
+                            <span><strong>Date:</strong> <?= formatDate($selectedEvent['event_date']) ?></span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">📍</span>
+                            <span><strong>Venue:</strong> <?= e($selectedEvent['location']) ?></span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">💺</span>
+                            <span><strong>Capacity:</strong> <?= e($selectedEvent['capacity'] ?? 100) ?> Attendees</span>
+                        </div>
+                    </div>
+
+                    <div class="spotlight-desc">
+                        <?= e($selectedEvent['description']) ?>
+                    </div>
+                </div>
+            <?php else: ?>
+                <div class="spotlight-body" style="text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 3rem; margin-bottom: 12px;">🎟️</div>
+                    <h3 style="margin-bottom: 8px;">Select an Event</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Choose a summit from the dropdown list to view venue details and reserve your pass.</p>
+                </div>
+            <?php endif; ?>
+        </aside>
+
+        <!-- Right Column: Registration Form Card -->
         <div class="form-card">
             <div class="form-header">
-                <h1>🎪 Event Registration</h1>
-                <p>Fill in your contact information below to secure your event seat.</p>
+                <h1>Secure Your Event Pass</h1>
+                <p>Please enter your contact information to finalize your registration.</p>
             </div>
 
             <?php if (!empty($errors['general'])): ?>
@@ -82,16 +121,6 @@ include __DIR__ . '/includes/header.php';
                     <div class="alert-content">
                         <span class="alert-icon">⚠️</span>
                         <span><?= e($errors['general']) ?></span>
-                    </div>
-                </div>
-            <?php endif; ?>
-
-            <?php if ($selectedEvent): ?>
-                <div class="event-preview-banner">
-                    <div class="preview-badge">🎟️</div>
-                    <div class="preview-details">
-                        <h4><?= e($selectedEvent['title']) ?></h4>
-                        <p>📅 <?= formatDate($selectedEvent['event_date']) ?> &nbsp;•&nbsp; 📍 <?= e($selectedEvent['location']) ?></p>
                     </div>
                 </div>
             <?php endif; ?>
@@ -108,7 +137,7 @@ include __DIR__ . '/includes/header.php';
                                id="name" 
                                name="name" 
                                class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>" 
-                               placeholder="e.g. John Doe" 
+                               placeholder="e.g. Sarah Connor" 
                                value="<?= e($formData['name']) ?>" 
                                required 
                                autocomplete="name">
@@ -127,12 +156,12 @@ include __DIR__ . '/includes/header.php';
                                id="email" 
                                name="email" 
                                class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>" 
-                               placeholder="e.g. john@example.com" 
+                               placeholder="e.g. sarah.connor@example.com" 
                                value="<?= e($formData['email']) ?>" 
                                required 
                                autocomplete="email">
                     </div>
-                    <div class="form-hint">Confirmation badge and registration details will be associated with this email.</div>
+                    <div class="form-hint">Confirmation badge, calendar invite, and ticket voucher will be sent to this email.</div>
                     <?php if (isset($errors['email'])): ?>
                         <div class="form-error">⚠️ <?= e($errors['email']) ?></div>
                     <?php endif; ?>
@@ -140,14 +169,15 @@ include __DIR__ . '/includes/header.php';
 
                 <!-- Event Select Field (Auto-filled / Dropdown) -->
                 <div class="form-group">
-                    <label for="event_id" class="form-label">Selected Event <span class="required">*</span></label>
+                    <label for="event_id" class="form-label">Select Summit / Conference <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <span class="input-icon">📅</span>
                         <select id="event_id" 
                                 name="event_id" 
                                 class="form-control form-control-select <?= isset($errors['event_id']) ? 'is-invalid' : '' ?>" 
+                                onchange="if(this.value) window.location.href='register.php?event_id=' + this.value;"
                                 required>
-                            <option value="">-- Choose an Event --</option>
+                            <option value="">-- Choose an Event (<?= count($events) ?> Available) --</option>
                             <?php foreach ($events as $ev): ?>
                                 <option value="<?= (int)$ev['id'] ?>" <?= ((int)$formData['event_id'] === (int)$ev['id']) ? 'selected' : '' ?>>
                                     <?= e($ev['title']) ?> (<?= formatDate($ev['event_date'], 'M j, Y') ?>)
@@ -162,7 +192,7 @@ include __DIR__ . '/includes/header.php';
 
                 <div style="margin-top: 32px;">
                     <button type="submit" class="btn-submit">
-                        <span>Complete Registration</span>
+                        <span>Confirm & Complete Registration</span>
                         <span>→</span>
                     </button>
                 </div>

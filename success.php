@@ -1,12 +1,12 @@
 <?php
 /**
- * Registration Success & Summary Page
+ * Registration Success & Summary Page (Luxury Voucher Edition)
  */
 
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/functions.php';
 
-$pageTitle = "Registration Confirmation Summary";
+$pageTitle = "Registration Confirmed - Official Voucher";
 
 $code = isset($_GET['code']) ? trim($_GET['code']) : '';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
@@ -27,13 +27,13 @@ include __DIR__ . '/includes/header.php';
         <?php if ($registration): ?>
             <div class="success-badge-icon">🎉</div>
             <h1 class="success-title">You're Officially Registered!</h1>
-            <p class="success-subtitle">A seat has been reserved for you. Please retain your registration reference below.</p>
+            <p class="success-subtitle">A confirmed pass has been generated. Please save your reference voucher below.</p>
 
-            <!-- Registration Summary Ticket Card -->
+            <!-- Luxury Ticket Voucher Card -->
             <div class="ticket-card" id="registrationTicket">
                 <div class="ticket-header">
                     <div>
-                        <span class="ticket-field-label">Event Name</span>
+                        <span class="ticket-field-label">Official Event Pass</span>
                         <h2 class="ticket-event-name"><?= e($registration['event_title']) ?></h2>
                     </div>
                     <div class="ticket-code-pill">
@@ -59,18 +59,18 @@ include __DIR__ . '/includes/header.php';
                         <span class="ticket-field-value">📍 <?= e($registration['event_location']) ?></span>
                     </div>
                     <div class="ticket-field">
-                        <span class="ticket-field-label">Category</span>
+                        <span class="ticket-field-label">Category Track</span>
                         <span class="ticket-field-value">🏷️ <?= e($registration['event_category'] ?? 'General') ?></span>
                     </div>
                     <div class="ticket-field">
-                        <span class="ticket-field-label">Date Registered</span>
+                        <span class="ticket-field-label">Date of Booking</span>
                         <span class="ticket-field-value">🕒 <?= formatDate($registration['date_registered']) ?></span>
                     </div>
                 </div>
 
                 <?php if (!empty($registration['event_description'])): ?>
                     <div class="ticket-description">
-                        <strong>Event Overview:</strong><br>
+                        <strong style="color: #ffffff;">Agenda & Overview:</strong><br>
                         <?= e($registration['event_description']) ?>
                     </div>
                 <?php endif; ?>
@@ -82,10 +82,10 @@ include __DIR__ . '/includes/header.php';
                     📋 Copy Reference Code
                 </button>
                 <button type="button" class="btn-ticket btn-ticket-outline" onclick="window.print();">
-                    🖨️ Print Summary
+                    🖨️ Print Ticket Voucher
                 </button>
                 <a href="<?= $baseUrl ?>/index.php" class="btn-ticket btn-ticket-outline">
-                    🎪 Explore More Events
+                    🎪 Explore 16+ More Summits
                 </a>
             </div>
 
@@ -93,7 +93,7 @@ include __DIR__ . '/includes/header.php';
             <div class="empty-state">
                 <div class="empty-state-icon">❓</div>
                 <h3>Registration Not Found</h3>
-                <p>We could not locate this registration record. It may have been modified or deleted.</p>
+                <p>We could not locate this registration record. It may have been updated or removed.</p>
                 <div style="margin-top: 24px;">
                     <a href="<?= $baseUrl ?>/index.php" class="btn-ticket btn-ticket-primary">Return to Homepage</a>
                 </div>

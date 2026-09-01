@@ -67,8 +67,8 @@ $homeRes = httpGet($baseUrl . '/index.php', $cookieFile);
 runHttpTest("Homepage returns HTTP 200", $homeRes['status'] === 200);
 runHttpTest("Homepage contains brand logo and event listings", 
     str_contains($homeRes['body'], 'EventSphere') && 
-    str_contains($homeRes['body'], 'Featured Upcoming Events') &&
-    str_contains($homeRes['body'], 'Register Now')
+    str_contains($homeRes['body'], 'Upcoming Scheduled Summits') &&
+    str_contains($homeRes['body'], 'Register')
 );
 
 // Extract CSRF token from registration page

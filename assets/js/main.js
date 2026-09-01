@@ -1,5 +1,5 @@
 /**
- * EventSphere - Interactive Frontend Scripts
+ * EventSphere - Interactive Frontend Scripts (Premium Edition)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -86,17 +86,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Homepage Event Filtering (Search & Category)
+    // 3. Homepage Event Filtering (Pills & Search)
     const eventSearchInput = document.getElementById('eventSearchInput');
-    const eventCategoryFilter = document.getElementById('eventCategoryFilter');
+    const searchCounter = document.getElementById('searchCounter');
+    const categoryPills = document.querySelectorAll('.category-pill');
     const eventCards = document.querySelectorAll('.event-card');
     const emptyFilterState = document.getElementById('emptyFilterState');
+
+    let activeCategory = 'all';
 
     function filterEvents() {
         if (!eventCards.length) return;
 
         const searchTerm = (eventSearchInput ? eventSearchInput.value : '').toLowerCase().trim();
-        const selectedCategory = (eventCategoryFilter ? eventCategoryFilter.value : 'all').toLowerCase();
         let visibleCount = 0;
 
         eventCards.forEach(card => {
@@ -105,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const category = card.getAttribute('data-category') || '';
 
             const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
-            const matchesCategory = (selectedCategory === 'all' || category === selectedCategory);
+            const matchesCategory = (activeCategory === 'all' || category === activeCategory);
 
             if (matchesSearch && matchesCategory) {
                 card.style.display = 'flex';
@@ -115,17 +117,44 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        if (searchCounter) {
+            searchCounter.textContent = `${visibleCount} ${visibleCount === 1 ? 'Event' : 'Events'}`;
+        }
+
         if (emptyFilterState) {
             emptyFilterState.style.display = (visibleCount === 0) ? 'block' : 'none';
         }
     }
 
+    if (categoryPills.length > 0) {
+        categoryPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                categoryPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                activeCategory = pill.getAttribute('data-category');
+                filterEvents();
+            });
+        });
+    }
+
     if (eventSearchInput) {
         eventSearchInput.addEventListener('input', filterEvents);
     }
-    if (eventCategoryFilter) {
-        eventCategoryFilter.addEventListener('change', filterEvents);
-    }
+
+    window.resetFilters = function() {
+        if (eventSearchInput) eventSearchInput.value = '';
+        activeCategory = 'all';
+        if (categoryPills.length > 0) {
+            categoryPills.forEach(p => {
+                if (p.getAttribute('data-category') === 'all') {
+                    p.classList.add('active');
+                } else {
+                    p.classList.remove('active');
+                }
+            });
+        }
+        filterEvents();
+    };
 
     // 4. Modal Helpers for Admin Portal
     window.openModal = function(modalId) {
@@ -198,12 +227,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(code).then(() => {
                 const originalText = buttonEl.innerHTML;
-                buttonEl.innerHTML = '✅ Copied!';
+                buttonEl.innerHTML = '✅ Reference Copied!';
                 buttonEl.style.background = '#10b981';
                 setTimeout(() => {
                     buttonEl.innerHTML = originalText;
                     buttonEl.style.background = '';
-                }, 2000);
+                }, 2200);
             });
         }
     };

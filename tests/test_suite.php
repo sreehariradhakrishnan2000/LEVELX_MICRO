@@ -9,8 +9,12 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 // Setup environment for testing (use SQLite memory or file if MySQL is not reachable, or test MySQL directly)
+$testDbPath = __DIR__ . '/test_database.sqlite';
+if (file_exists($testDbPath)) {
+    @unlink($testDbPath);
+}
 putenv('DB_TYPE=sqlite');
-putenv('DB_SQLITE_PATH=' . __DIR__ . '/test_database.sqlite');
+putenv('DB_SQLITE_PATH=' . $testDbPath);
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
